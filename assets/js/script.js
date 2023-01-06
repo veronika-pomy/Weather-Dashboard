@@ -48,3 +48,5 @@ getWeather();
         // Data is updated when the city btn is clicked 
 
     // See if I can add bootstrap and googlefont apis
+
+    // make sure to add about in github
