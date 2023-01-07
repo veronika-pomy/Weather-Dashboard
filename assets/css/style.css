@@ -1,0 +1,136 @@
+:root {
+    --un-blue: #5A95ED;
+    --blue-yonder: #516E99;
+    --sil-pink: #C9ADAF;
+    --blk-coral: #555E6B;
+    --prus-blue: #0F3266;
+    --light: white;
+}
+* {
+    margin: 0;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+header {
+    background-color: var(--prus-blue);
+    text-align: center;
+    color: var(--light);
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+main {
+    display: flex;
+    flex-direction: row;
+}
+.search-container,
+.weather-container  {
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-top: 1vh;
+}
+.search-container {
+    width: 20%;
+}
+.user-input {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    padding: 1vh;
+    border: 1px solid var(--blk-coral);
+    border-radius: 6px;
+}
+.user-input:focus {
+    outline-color: var(--un-blue);
+}
+#search-btn,
+.city-btn {
+    padding-top: 0.8vh;
+    padding-bottom: 0.8vh;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    color: var(--light);
+}
+#search-btn {
+    background-color: var(--blue-yonder);
+}
+.city-btn {
+    background-color: var(--blk-coral);
+    margin: 0.8vh;
+}
+#search-btn:hover {
+    background-color: var(--prus-blue);
+}
+.city-btn:hover {
+    background-color: var(--prus-blue);
+}
+.weather-container {
+    width: 80%;
+}
+.city-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1vh;
+}
+#history-header {
+    text-align: center;
+    margin-bottom: 1vh;
+}
+hr {
+    height: 0.5px;
+    border: none;
+    background-color: var(--blk-coral);
+}
+.history-container {
+    padding-top: 1vh;
+    display: flex;
+    flex-direction: column;
+}
+.today-container {
+    padding: 1vh;
+    border: 2px solid var(--blk-coral);
+}
+#five-days-header {
+    margin-top: 1vh;
+}
+.five-day-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding-top: 1vh;
+}
+.day {
+    color: var(--light);
+    background-color: var(--blk-coral);
+    padding-right: 6vw;
+    padding-left: 0.5vw;
+    padding-top: 0.5vh;
+    padding-bottom: 8vh;
+}
+#header-date,
+p {
+    padding-top: 1.5vh;
+}
+
+/* for smartphones and smaller ipads - set flex-directtion to column for better user experince */
+@media screen and (max-width: 768px) {
+    main {
+        flex-direction: column;
+        margin-bottom: 1vh;
+        margin-right: 1vw;
+    }
+    .search-container {
+        width: 100%;
+    }
+    .weather-container {
+        width: 100%;
+    }
+    .five-day-container {
+        flex-direction: column;
+    }
+    .day {
+        margin-top: 1vh;
+        padding-bottom: 0.5vh;
+    }
+  }
+  

@@ -8,15 +8,106 @@
     <title>Get Weather</title>
 </head>
 <body>
-    
+    <header>
+        <h1>Weather Dashboard</h1>
+    </header>
+
+    <main>
+        <!-- search city -->
+        <div class="search-container">
+            <!-- user input -->
+            <div class="city-container"> 
+                <h2>Search City</h2>
+                <input type ="search" id="user-input" class="user-input" placeholder="New York"/>
+                <button id="search-btn">Search</button>
+            </div>
+
+            <!-- user search history -->
+            <h4 id="history-header">Previous Searches</h4>
+            <hr />
+            <div class="history-container">
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+                <button class="city-btn">Placeholder</button>
+            </div>
+        </div>
+
+        <!-- weather forecast  -->
+        <div class="weather-container">
+            <!-- today's Weather -->
+            <div class="today-container">
+                <h3>City Name</h3>
+                <p>Date</p>
+                <p>Condition:</p>
+                <p>Temp:</p>
+                <p>Wind:</p>
+                <p>Humidity:</p>
+
+            </div>
+
+            <!-- 5-day forecast -->
+            <h4 id="five-days-header">5-Day Forecast</h4>
+
+            <div class="five-day-container">
+                <div class="day" id="day-1">
+                    <h4 class="header-date">Date</h4>
+                    <p>Condition:</p>
+                    <p>Temp:</p>
+                    <p>Wind:</p>
+                    <p>Humidity:</p>
+                </div>
+                <div class="day" id="day-2">
+                    <h4 class="header-date">Date</h4>
+                    <p>Condition:</p>
+                    <p>Temp:</p>
+                    <p>Wind:</p>
+                    <p>Humidity:</p>
+                </div>
+                <div class="day" id="day-3">
+                    <h4 class="header-date">Date</h4>
+                    <p>Condition:</p>
+                    <p>Temp:</p>
+                    <p>Wind:</p>
+                    <p>Humidity:</p>
+                </div>
+                <div class="day" id="day-4">
+                    <h4 class="header-date">Date</h4>
+                    <p>Condition:</p>
+                    <p>Temp:</p>
+                    <p>Wind:</p>
+                    <p>Humidity:</p>
+                </div>
+                <div class="day" id="day-5">
+                    <h4 class="header-date">Date</h4>
+                    <p>Condition:</p>
+                    <p>Temp:</p>
+                    <p>Wind:</p>
+                    <p>Humidity:</p>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script src="./assets/js/script.js"></script>
 </body>
 </html>
 
 <!-- HTML and CSS 
-    1. Title "Weather Dashboard" / "Get Weather" / "Know Weather"
-    2. Search Bar 
+
     3. Btns to save and retrieve search history (city name should be the key)
         3.1. Created dynamically in js
         3.2. Everytime btn is clicked API fetches data for chosen city

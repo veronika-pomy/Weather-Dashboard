@@ -28,18 +28,21 @@ function getWeather ( ) {
                 console.log(data);
                 var cityName = data.city.name;
                 console.log(cityName);
-                var forecastDate = new Date(data.list[0].dt_txt).toDateString();
-                console.log(forecastDate);
-                var cityConditon = data.list[0].weather[0].main;
-                console.log(cityConditon);
-                var cityTemp = `${Math.floor(data.list[0].main.temp)} °F`;
-                console.log(cityTemp);
-                var cityHum = `${data.list[0].main.humidity} %`;
-                console.log(cityHum);
-                var cityWindSpeed = `${data.list[0].wind.speed} MPH`;
-                console.log(cityWindSpeed);
-                // need for loop for a 5 dayforecast
-                // will need to figure out how to skip redundant timestamps
+                var objLength = data.list.length;
+
+                // loop to get data for 1 timestamp a day for 5 days
+                for (var i = 0; i < objLength; i+=7) {
+                    var forecastDate = new Date(data.list[i].dt_txt).toDateString();
+                    console.log(forecastDate);
+                    var cityConditon = data.list[i].weather[0].main;
+                    console.log(cityConditon);
+                    var cityTemp = `${Math.floor(data.list[i].main.temp)} °F`;
+                    console.log(cityTemp);
+                    var cityHum = `${data.list[i].main.humidity} %`;
+                    console.log(cityHum);
+                    var cityWindSpeed = `${data.list[i].wind.speed} MPH`;
+                    console.log(cityWindSpeed);
+                };
             });
     })};
 
@@ -47,8 +50,7 @@ function getWeather ( ) {
 // https://openweathermap.org/weather-conditions
 
 //  attach to onclick listener for all buttons 
-getWeather();
+// getWeather();
 
-// 2. Save city name in local storage to keep the record of user history 
+// Save city name in local storage to keep the record of user history 
 
-    // make sure to add about in github !!!
