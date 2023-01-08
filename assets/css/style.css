@@ -75,6 +75,7 @@ main {
 #history-header {
     text-align: center;
     margin-bottom: 1vh;
+    margin-top: 1vh;
 }
 hr {
     height: 0.5px;
@@ -90,7 +91,7 @@ hr {
     padding: 1vh;
     border: 2px solid var(--blk-coral);
 }
-#five-days-header {
+.five-days-header {
     margin-top: 1vh;
 }
 .five-day-container {

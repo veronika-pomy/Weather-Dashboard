@@ -22,47 +22,32 @@
                 <button id="search-btn">Search</button>
             </div>
 
+            <hr />
+
             <!-- user search history -->
             <h4 id="history-header">Previous Searches</h4>
-            <hr />
-            <div class="history-container">
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-                <button class="city-btn">Placeholder</button>
-            </div>
+
+            <!-- Holds btns generated in js to hold user cities -->
+            <div class="history-container"></div>
         </div>
 
         <!-- weather forecast  -->
         <div class="weather-container">
-            <!-- today's Weather -->
-            <div class="today-container">
-                <h3>City Name</h3>
-                <p>Date</p>
-                <p>Condition:</p>
-                <p>Temp:</p>
-                <p>Wind:</p>
-                <p>Humidity:</p>
-
+            <!-- today's weather -->
+            <div class="insert-els">
+                <h3 id="city-today"></h3>
+                <p id="today-date"></p>
+                <p id="today-conditions"></p>
+                <p id="today-temp"></p>
+                <p id="today-wind"></p>
+                <p id="today-humidity"></p>
             </div>
-
+            
             <!-- 5-day forecast -->
-            <h4 id="five-days-header">5-Day Forecast</h4>
+            <h4 class="five-days-header"></h4>
 
             <div class="five-day-container">
+                <!--
                 <div class="day" id="day-1">
                     <h4 class="header-date">Date</h4>
                     <p>Condition:</p>
@@ -97,10 +82,13 @@
                     <p>Temp:</p>
                     <p>Wind:</p>
                     <p>Humidity:</p>
-                </div>
+                </div> -->
             </div>
         </div>
     </main>
+
+    <!-- Link jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 
     <script src="./assets/js/script.js"></script>
 </body>
