@@ -27,7 +27,7 @@
             <!-- user search history -->
             <h4 id="history-header">Previous Searches</h4>
 
-            <!-- Holds btns generated in js to hold user cities -->
+            <!-- holds btns generated in js to hold user cities -->
             <div class="history-container"></div>
         </div>
 
@@ -47,47 +47,46 @@
             <h4 class="five-days-header"></h4>
 
             <div class="five-day-container">
-                <!--
-                <div class="day" id="day-1">
-                    <h4 class="header-date">Date</h4>
-                    <p>Condition:</p>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
+                <div id="day-1">
+                    <h4 id="header-day-1" class="header-date"></h4>
+                    <p id="cond-day-1"></p>
+                    <p id="temp-day-1"></p>
+                    <p id="wind-day-1"></p>
+                    <p id="hum-day-1"></p>
                 </div>
-                <div class="day" id="day-2">
-                    <h4 class="header-date">Date</h4>
-                    <p>Condition:</p>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
+                <div id="day-2">
+                    <h4 id="header-day-2"class="header-date"></h4>
+                    <p id="cond-day-2"></p>
+                    <p id="temp-day-2"></p>
+                    <p id="wind-day-2"></p>
+                    <p id="hum-day-2"></p>
                 </div>
-                <div class="day" id="day-3">
-                    <h4 class="header-date">Date</h4>
-                    <p>Condition:</p>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
+                <div id="day-3">
+                    <h4 id="header-day-3" class="header-date"></h4>
+                    <p id="cond-day-3"></p>
+                    <p id="temp-day-3"></p>
+                    <p id="wind-day-3"></p>
+                    <p id="hum-day-3"></p>
                 </div>
-                <div class="day" id="day-4">
-                    <h4 class="header-date">Date</h4>
-                    <p>Condition:</p>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
+                <div id="day-4">
+                    <h4 id="header-day-4" class="header-date"></h4>
+                    <p id="cond-day-4"></p>
+                    <p id="temp-day-4"></p>
+                    <p id="wind-day-4"></p>
+                    <p id="hum-day-4"></p>
                 </div>
-                <div class="day" id="day-5">
-                    <h4 class="header-date">Date</h4>
-                    <p>Condition:</p>
-                    <p>Temp:</p>
-                    <p>Wind:</p>
-                    <p>Humidity:</p>
-                </div> -->
+                <div id="day-5">
+                    <h4 id="header-day-5" class="header-date"></h4>
+                    <p id="cond-day-5"></p>
+                    <p id="temp-day-5"></p>
+                    <p id="wind-day-5"></p>
+                    <p id="hum-day-5"></p>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Link jQuery -->
+    <!-- Link jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 
     <script src="./assets/js/script.js"></script>
@@ -97,11 +96,4 @@
 <!-- HTML and CSS 
 
     3. Btns to save and retrieve search history (city name should be the key)
-        3.1. Created dynamically in js
-        3.2. Everytime btn is clicked API fetches data for chosen city
-        3.4. Today's forecast for a given city 
-            3.4.1. Created dynamically in js
-            3.4.2. Data is updated when the city btn is clicked 
-        3.5. 5-day future forecast sections 
-            3.5.1. Created dynamically in js
     4. Data is updated when the city btn is clicked  -->

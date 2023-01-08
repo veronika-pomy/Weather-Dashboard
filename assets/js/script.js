@@ -12,18 +12,23 @@ var tempEl = $("#today-temp");
 var windEl = $("#today-wind");
 var humEl = $("#today-humidity");
 var fiveDayHeaderEl = $(".five-days-header");
+// grab history container el that will contain buttons for user search history
+var historyEl = $(".history-container");
 
-// function to create btns for cities searches
+// function to create btns for city searches
 function createBtn ( ) {
     var userInput = $("#user-input").val();
     var newBtn = $("<button>").appendTo(".history-container")
     newBtn.addClass("city-btn");
     newBtn.text(userInput);
+    localStorage.setItem(userInput, userInput); // saves the names of cities searched
+    // call function to get data using input value
+    getWeather(userInput);
 };
 
-// function to get city coordinates using using fetch, then get weather report using those coordinates 
-function getWeather ( ) {
-    var userCity = $("#user-input").val();
+// function to get city coordinates using using fetch, then get weather report using those coordinates, and display data to user 
+function getWeather (input) {
+    var userCity = input;
     // a query URL to get lat and lon coordinates by city name
     var queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&appid=${weatherApiKey}`;
     fetch(queryUrl)
@@ -46,30 +51,33 @@ function getWeather ( ) {
             .then(function (data) {
                 console.log(data);
                 var cityName = data.city.name;
-                console.log(cityName);
                 var objLength = data.list.length;
 
-                // determine which emoji to insert for today's weather condition
+                // function determine which emoji to insert for weather condition for today
                 var todayConditonData = data.list[0].weather[0].main;
                 var displayTodayCondition;
 
-                if (todayConditonData === "Clear") {
-                    displayTodayCondition = "🔆";
-                } else if (todayConditonData === "Clouds") {
-                    displayTodayCondition = "☁️";
-                } else if (todayConditonData === "Atmosphere") {
-                    displayTodayCondition = "🌫️";
-                } else if (todayConditonData === "Snow") {
-                    displayTodayCondition = "❄️";
-                } else if (todayConditonData === "Rain") {
-                    displayTodayCondition = "🌧️";
-                } else if (todayConditonData === "Drizzle") {
-                    displayTodayCondition = "☂️";
-                } else if (todayConditonData === "Thunderstorm") {
-                    displayTodayCondition = "⛈️";
-                } else {
-                    displayTodayCondition = todayConditonData;
+                function getEmoji ( ) {
+                    if (todayConditonData === "Clear") {
+                        displayTodayCondition = "🔆";
+                    } else if (todayConditonData === "Clouds") {
+                        displayTodayCondition = "☁️";
+                    } else if (todayConditonData === "Atmosphere") {
+                        displayTodayCondition = "🌫️";
+                    } else if (todayConditonData === "Snow") {
+                        displayTodayCondition = "❄️";
+                    } else if (todayConditonData === "Rain") {
+                        displayTodayCondition = "🌧️";
+                    } else if (todayConditonData === "Drizzle") {
+                        displayTodayCondition = "☂️";
+                    } else if (todayConditonData === "Thunderstorm") {
+                        displayTodayCondition = "⛈️";
+                    } else {
+                        displayTodayCondition = todayConditonData;
+                    };
                 };
+
+                getEmoji ( );
 
                 // insert class to create border around today's weather container
                 $(".insert-els").addClass("today-container");
@@ -85,18 +93,40 @@ function getWeather ( ) {
                 // insert value for the 5-day header 
                 fiveDayHeaderEl.text("5-Day Forecast");
 
-                // loop to get data for 1 timestamp a day for 5 days
-                for (var i = 5; i < objLength; i+=7) {
-                    var forecastDate = new Date(data.list[i].dt_txt).toDateString();
-                    console.log(forecastDate);
-                    var cityConditon = data.list[i].weather[0].main;
-                    console.log(cityConditon);
-                    var cityTemp = `${Math.floor(data.list[i].main.temp)} °F`;
-                    console.log(cityTemp);
-                    var cityHum = `${data.list[i].main.humidity} %`;
-                    console.log(cityHum);
-                    var cityWindSpeed = `${data.list[i].wind.speed} MPH`;
-                    console.log(cityWindSpeed);
+                // variables to store data for the 5-day forecast 
+                var datesArr = [];
+                var condArr = [];
+                var tempArr = [];
+                var windArr = [];
+                var humArr = [];
+
+                // loop to get weather data for a given date once, excluding today's date
+                for (var i = 0; i < objLength-1; i++) {
+                    if (new Date(data.list[i].dt_txt).getDate() !== new Date(data.list[i+1].dt_txt).getDate()) {
+                        datesArr.push(new Date(data.list[i+1].dt_txt).toDateString());
+                        condArr.push(data.list[i+1].weather[0].main);
+                        tempArr.push(`Temp: ${Math.floor(data.list[i+1].main.temp)} °F`);
+                        windArr.push(`Wind: ${data.list[i].wind.speed} MPH`);
+                        humArr.push(`Humidity: ${data.list[i].main.humidity} %`);
+                    }; 
+                };
+
+                // convert condition string into emojis for the 5-Day Forecast Array
+                for (let i = 0; i < condArr.length; i++){
+                    todayConditonData = condArr[i];
+                    getEmoji ( );
+                    condArr[i] = displayTodayCondition;
+                };
+
+                // insert data values into html els for the 5-Day Forecast 
+                for (var i = 0; i < datesArr.length; i++) {
+                    // insert css style for divs
+                    $(`#day-${i+1}`).addClass("day");
+                    $(`#header-day-${i+1}`).text(datesArr[i]);
+                    $(`#cond-day-${i+1}`).text(condArr[i]);
+                    $(`#temp-day-${i+1}`).text(tempArr[i]);
+                    $(`#wind-day-${i+1}`).text(windArr[i]);
+                    $(`#hum-day-${i+1}`).text(humArr[i]);
                 };
             });
         }
@@ -106,10 +136,16 @@ function getWeather ( ) {
 // function executes creation of btns and weather search on the same click 
 function userInput ( ) {
     createBtn ( );
-    getWeather ( );
 };
 
+// listen for clicks on search button
 searchBtn.on("click", userInput);
 
-// Save city name in local storage to keep the record of user history 
-
+// listen for clicks on search history buttons
+historyEl.on("click", function (event) {
+    var element = event.target;
+    var userCityHis = element.textContent;
+    // call function to get weather data using cities from search history
+    getWeather(userCityHis);
+    console.log(userCityHis);
+});
