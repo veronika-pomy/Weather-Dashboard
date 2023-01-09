@@ -2,6 +2,8 @@
 var weatherApiKey = "d26e27c935d07fe0582289eb42ae5b1c";
 // store user input for city 
 var userCity;
+// store user cities in array for local storage
+var userCityList = [];
 // grab search btn using jQuery
 var searchBtn = $("#search-btn");
 // store html els to insert generated data 
@@ -15,15 +17,36 @@ var fiveDayHeaderEl = $(".five-days-header");
 // grab history container el that will contain buttons for user search history
 var historyEl = $(".history-container");
 
-// function to create btns for city searches
+// var to get previosly searched cities from local storage
+var citiesFromLocalStorage = JSON.parse(localStorage.getItem("userSearch"));
+
+// if there are cities saved in local storage, render buttons with city names 
+if (citiesFromLocalStorage) {
+    userCityList = citiesFromLocalStorage; 
+        for (var i = 0; i < citiesFromLocalStorage.length; i++) {
+            if (citiesFromLocalStorage[i]) {
+                var btnTextFromLocalStorage = citiesFromLocalStorage[i];
+                var newBtnFromLocalStorage = $("<button>").appendTo(".history-container")
+                newBtnFromLocalStorage.addClass("city-btn");
+                newBtnFromLocalStorage.text(btnTextFromLocalStorage);
+            };
+    };
+};
+
+// function to create btns for city searches and save user input in local storage 
 function createBtn ( ) {
     var userInput = $("#user-input").val();
-    var newBtn = $("<button>").appendTo(".history-container")
-    newBtn.addClass("city-btn");
-    newBtn.text(userInput);
-    localStorage.setItem(userInput, userInput); // saves the names of cities searched
-    // call function to get data using input value
-    getWeather(userInput);
+    if (userInput) {
+        var newBtn = $("<button>").appendTo(".history-container")
+        newBtn.addClass("city-btn");
+        newBtn.text(userInput);
+        userCityList.push(userInput);
+        localStorage.setItem("userSearch",JSON.stringify(userCityList)); // saves user searches in local storage
+        $("#user-input").val(""); // reset input field to empty string
+        getWeather(userInput); // call function to get data using input value
+    } else {
+        window.alert("Oops! Looks like you forgot to type in city name. Please try again."); // asks the user to enter city name in the search box
+    };
 };
 
 // function to get city coordinates using using fetch, then get weather report using those coordinates, and display data to user 
@@ -33,6 +56,16 @@ function getWeather (input) {
     var queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&appid=${weatherApiKey}`;
     fetch(queryUrl)
     .then (function (response) {
+        if (!response.ok) {
+            historyEl.find("button:last").remove(); // remove button for searches that didn't go through 
+            var checkLocalStorage = JSON.parse(localStorage.getItem("userSearch")); // remove last saved search in local storage 
+            var removeVal = checkLocalStorage.pop();
+            localStorage.setItem("userSearch",JSON.stringify(checkLocalStorage)); 
+            var checkUserCityList = userCityList; // remove last entered city from array 
+            var removeValArr = userCityList.pop();
+            userCityList = checkUserCityList;
+            window.alert("Oops! Something went wrong. Please try again.");
+        };
         return response.json();
     })
     .then(function (data) {
@@ -133,7 +166,7 @@ function getWeather (input) {
     );
 };
 
-// function executes creation of btns and weather search on the same click 
+// function executes creation of btns and weather search 
 function userInput ( ) {
     createBtn ( );
 };
@@ -144,8 +177,9 @@ searchBtn.on("click", userInput);
 // listen for clicks on search history buttons
 historyEl.on("click", function (event) {
     var element = event.target;
-    var userCityHis = element.textContent;
-    // call function to get weather data using cities from search history
-    getWeather(userCityHis);
-    console.log(userCityHis);
+    if (element.matches("button")) {
+        var userCityHis = element.textContent;
+        // call function to get weather data using cities from search history
+        getWeather(userCityHis);
+    };
 });
