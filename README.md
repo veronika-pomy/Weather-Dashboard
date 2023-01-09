@@ -30,7 +30,7 @@ The following criteria include app functions:
 
 This mock-up demonstrates the user interface of the application.
 
-![Weather](INSERT THE IMAGE)
+![Weather](./assets/imgs/weather-app-demo.png)
 
 <p align="right">(<a href="#weather-forecast-app">back to top</a>)</p>
 
