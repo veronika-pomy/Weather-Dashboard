@@ -62,6 +62,7 @@ This list includes resources used for the project.
 - [jQuery](https://jquery.com/)
 - [Open Weather API](https://openweathermap.org/)
 - [The Full-Stack Blog](https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys)
+- [TutorialRepublic: Convert UNIX Timestamp to Javascript Time](https://www.tutorialrepublic.com/faq/how-to-convert-a-unix-timestamp-to-time-in-javascript.php)
 
 <p align="right">(<a href="#weather-forecast-app">back to top</a>)</p>
 
