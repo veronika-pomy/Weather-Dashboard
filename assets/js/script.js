@@ -107,22 +107,31 @@ function getWeatherFuture (input) {
                 // insert value for the forecast header 
                 fiveDayHeaderEl.text("Future Forecast");
 
-                // variables to store data for the future forecast 
-                var datesArr = [];
-                var condArr = [];
-                var tempArr = [];
-                var windArr = [];
-                var humArr = [];
+                // variables to store data for the future forecast, always grab first date values
+                var datesArr = [new Date(data.list[0].dt_txt).toDateString()]; 
+                var condArr = [data.list[0].weather[0].main];
+                var tempArr = [`Temp: ${Math.floor(data.list[0].main.temp)} °F`];
+                var windArr = [`Wind: ${data.list[0].wind.speed} MPH`];
+                var humArr = [`Humidity: ${data.list[0].main.humidity} %`];
 
                 // loop to get weather data for a given date once
                 for (var i = 0; i < objLength-1; i++) {
                     if (new Date(data.list[i].dt_txt).getDate() !== new Date(data.list[i+1].dt_txt).getDate()) {
-                        datesArr.push(new Date(data.list[i].dt_txt).toDateString());
-                        condArr.push(data.list[i].weather[0].main);
-                        tempArr.push(`Temp: ${Math.floor(data.list[i].main.temp)} °F`);
-                        windArr.push(`Wind: ${data.list[i].wind.speed} MPH`);
-                        humArr.push(`Humidity: ${data.list[i].main.humidity} %`);
+                        datesArr.push(new Date(data.list[i+1].dt_txt).toDateString());
+                        condArr.push(data.list[i+1].weather[0].main);
+                        tempArr.push(`Temp: ${Math.floor(data.list[i+1].main.temp)} °F`);
+                        windArr.push(`Wind: ${data.list[i+1].wind.speed} MPH`);
+                        humArr.push(`Humidity: ${data.list[i+1].main.humidity} %`);
                     }; 
+                };
+
+                // check if arrays contains today's data, if so, remove before proceeding
+                if (datesArr.length >= 6) {
+                    datesArr.shift();
+                    condArr.shift();
+                    tempArr.shift();
+                    windArr.shift();
+                    humArr.shift();
                 };
 
                 // convert condition string into emojis for the Future Forecast Array
@@ -172,8 +181,8 @@ function getWeatherNow (input) {
                 var todayConditonData = data.weather[0].main;
                 var displayTodayCondition;
 
-                // function determine which emoji to insert for current report 
-                function getEmojiToday ( ) {
+                // determine which emoji to insert for current report 
+                
                     if (todayConditonData === "Clear") {
                         displayTodayCondition = "🔆";
                     } else if (todayConditonData === "Clouds") {
@@ -191,9 +200,6 @@ function getWeatherNow (input) {
                     } else {
                         displayTodayCondition = todayConditonData;
                     };
-                };
-
-                getEmojiToday();
                 
                 // insert class to create border around today's weather container
                 $(".insert-els").addClass("today-container");
