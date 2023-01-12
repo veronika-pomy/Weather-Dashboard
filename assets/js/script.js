@@ -1,10 +1,6 @@
-// store OpenWeather API key
 var weatherApiKey = "d26e27c935d07fe0582289eb42ae5b1c";
-// store user input for city 
 var userCity;
-// store user cities in array for local storage
 var userCityList = [];
-// grab search btn
 var searchBtn = $("#search-btn");
 // store html els to insert generated data 
 var cityEl = $("#city-today");
@@ -72,7 +68,7 @@ function createBtn ( ) {
     };
 };
 
-// get city coordinates using using fetch, then get current weather report using those coordinates, and display data to user 
+// get city coordinates using using fetch, current weather report, and display data to user 
 function getWeatherNow (input) {
     var userCity = input;
     // a query URL to get lat and lon coordinates by city name
@@ -94,7 +90,7 @@ function getWeatherNow (input) {
     .then(function (data) {
         var cityLat = data.coord.lat;
         var cityLon = data.coord.lon;
-        // a query URL to get weather using city lat and lon coordinates 
+        // a query URL to get weather using lat and lon coordinates 
         // imperial units to get temp in Fahrenheit and wind speed in MPH
         var cityWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${cityLat}&lon=${cityLon}&appid=${weatherApiKey}&units=imperial`;
         
@@ -109,10 +105,10 @@ function getWeatherNow (input) {
                 // determine which emoji to insert for current report 
                 getWeatherEmoji (conditonData);
                 
-                // create border around today's weather container
+                // create border around currrent weather container
                 $(".insert-els").addClass("today-container");
 
-                // insert today's conditions
+                // insert current data
                 cityEl.text(cityName);
                 dateEl.text(new Date(data.dt*1000).toDateString()); // convert unix timestamp to javascript time
                 condEl.text(displayCondition);
@@ -147,7 +143,7 @@ function getWeatherFuture (input) {
                 // insert value for the forecast header 
                 fiveDayHeaderEl.text("Future Forecast");
 
-                // variables to store data for the future forecast, always grab first date values
+                // store data for the future forecast, always grab first date values
                 var datesArr = [new Date(data.list[0].dt_txt).toDateString()]; 
                 var condArr = [data.list[0].weather[0].main];
                 var tempArr = [`Temp: ${Math.floor(data.list[0].main.temp)} °F`];
@@ -165,7 +161,7 @@ function getWeatherFuture (input) {
                     }; 
                 };
 
-                // check if first value in array contains today's data, removes it before proceeding
+                // check if first value in array contains today's data and remove it
                 if (datesArr[0] === new Date().toDateString()) {
                     datesArr.shift();
                     condArr.shift();
@@ -174,7 +170,7 @@ function getWeatherFuture (input) {
                     humArr.shift();
                 };
 
-                // convert condition string into emojis for the Future Forecast Array
+                // convert condition string into emojis 
                 for (let i = 0; i < condArr.length; i++){
                     var futureConditonData = condArr[i];
                     getWeatherEmoji (futureConditonData);
