@@ -4,7 +4,7 @@ var weatherApiKey = "d26e27c935d07fe0582289eb42ae5b1c";
 var userCity;
 // store user cities in array for local storage
 var userCityList = [];
-// grab search btn using jQuery
+// grab search btn
 var searchBtn = $("#search-btn");
 // store html els to insert generated data 
 var cityEl = $("#city-today");
@@ -14,10 +14,32 @@ var tempEl = $("#today-temp");
 var windEl = $("#today-wind");
 var humEl = $("#today-humidity");
 var fiveDayHeaderEl = $(".five-days-header");
-// grab history container el that will contain buttons for user search history
 var historyEl = $(".history-container");
 
-// var to get previosly searched cities from local storage
+// var to render emojis
+var displayCondition;
+
+// determine emoji for weather condition 
+function getWeatherEmoji (input) {
+                    
+    var compare = input;
+
+    if (compare === "Clear") {
+        displayCondition = "🔆";
+    } else if (compare === "Clouds" || compare === "Atmosphere") {
+        displayCondition = "☁️";
+    } else if (compare === "Snow") {
+        displayCondition = "❄️";
+    } else if (compare === "Rain" || compare === "Drizzle") {
+        displayCondition = "🌧️"
+    } else if (compare === "Thunderstorm") {
+        displayCondition = "⛈️";
+    } else {
+        displayCondition = input;
+    };
+};
+
+// get previosly searched cities from local storage
 var citiesFromLocalStorage = JSON.parse(localStorage.getItem("userSearch"));
 
 // if there are cities saved in local storage, render buttons with city names 
@@ -33,7 +55,7 @@ if (citiesFromLocalStorage) {
     };
 };
 
-// function to create btns for city searches and save user input in local storage 
+// create btns for city searches and save user input in local storage 
 function createBtn ( ) {
     var userInput = $("#user-input").val();
     if (userInput) {
@@ -42,16 +64,16 @@ function createBtn ( ) {
         newBtn.text(userInput);
         userCityList.push(userInput);
         localStorage.setItem("userSearch",JSON.stringify(userCityList)); // saves user searches in local storage
-        $("#user-input").val(""); // reset input field to empty string
+        $("#user-input").val(""); 
         getWeatherFuture(userInput); 
         getWeatherNow(userInput);
     } else {
-        window.alert("Oops! Looks like you forgot to type in city name. Please try again."); // asks the user to enter city name in the search box
+        window.alert("Oops! Looks like you forgot to type in city name. Please try again.");
     };
 };
 
-// function to get city coordinates using using fetch, then get future weather report using those coordinates, and display data to user 
-function getWeatherFuture (input) {
+// get city coordinates using using fetch, then get current weather report using those coordinates, and display data to user 
+function getWeatherNow (input) {
     var userCity = input;
     // a query URL to get lat and lon coordinates by city name
     var queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&appid=${weatherApiKey}`;
@@ -73,7 +95,46 @@ function getWeatherFuture (input) {
         var cityLat = data.coord.lat;
         var cityLon = data.coord.lon;
         // a query URL to get weather using city lat and lon coordinates 
-        // added imperial units to get temp in Fahrenheit and wind speed in MPH
+        // imperial units to get temp in Fahrenheit and wind speed in MPH
+        var cityWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${cityLat}&lon=${cityLon}&appid=${weatherApiKey}&units=imperial`;
+        
+            fetch(cityWeatherUrl)
+            .then (function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                var cityName = data.name;               
+                var conditonData = data.weather[0].main;
+
+                // determine which emoji to insert for current report 
+                getWeatherEmoji (conditonData);
+                
+                // create border around today's weather container
+                $(".insert-els").addClass("today-container");
+
+                // insert today's conditions
+                cityEl.text(cityName);
+                dateEl.text(new Date(data.dt*1000).toDateString()); // convert unix timestamp to javascript time
+                condEl.text(displayCondition);
+                tempEl.text(`Temp: ${Math.floor(data.main.temp)} °F`);
+                windEl.text(`Wind: ${data.wind.speed} MPH`);
+                humEl.text(`Humidity: ${data.main.humidity} %`);
+             });
+        }
+    );
+};
+
+// get weather report and display data to user 
+function getWeatherFuture (input) {
+    var userCity = input;
+    var queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&appid=${weatherApiKey}`;
+    fetch(queryUrl)
+    .then (function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        var cityLat = data.coord.lat;
+        var cityLon = data.coord.lon;
         var cityWeatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&appid=${weatherApiKey}&units=imperial`;
         
             fetch(cityWeatherUrl)
@@ -81,28 +142,8 @@ function getWeatherFuture (input) {
                 return response.json();
             })
             .then(function (data) {
+                console.log(data);
                 var objLength = data.list.length;
-
-                // function to determine which weather emoji to insert for weather condition
-                function getEmoji ( ) {
-                    if (todayConditonData === "Clear") {
-                        displayTodayCondition = "🔆";
-                    } else if (todayConditonData === "Clouds") {
-                        displayTodayCondition = "☁️";
-                    } else if (todayConditonData === "Atmosphere") {
-                        displayTodayCondition = "🌫️";
-                    } else if (todayConditonData === "Snow") {
-                        displayTodayCondition = "❄️";
-                    } else if (todayConditonData === "Rain") {
-                        displayTodayCondition = "🌧️";
-                     } else if (todayConditonData === "Drizzle") {
-                        displayTodayCondition = "☂️";
-                     } else if (todayConditonData === "Thunderstorm") {
-                        displayTodayCondition = "⛈️";
-                     } else {
-                     displayTodayCondition = todayConditonData;
-                    };
-                };
 
                 // insert value for the forecast header 
                 fiveDayHeaderEl.text("Future Forecast");
@@ -125,8 +166,8 @@ function getWeatherFuture (input) {
                     }; 
                 };
 
-                // check if arrays contains today's data, if so, remove before proceeding
-                if (datesArr.length >= 6) {
+                // check if first value in array contains today's data, removes it before proceeding
+                if (datesArr[0] === new Date().toDateString()) {
                     datesArr.shift();
                     condArr.shift();
                     tempArr.shift();
@@ -136,9 +177,9 @@ function getWeatherFuture (input) {
 
                 // convert condition string into emojis for the Future Forecast Array
                 for (let i = 0; i < condArr.length; i++){
-                    todayConditonData = condArr[i];
-                    getEmoji ( );
-                    condArr[i] = displayTodayCondition;
+                    var futureConditonData = condArr[i];
+                    getWeatherEmoji (futureConditonData);
+                    condArr[i] = displayCondition;
                 };
 
                 // insert data values into html els for the Future Forecast 
@@ -156,67 +197,7 @@ function getWeatherFuture (input) {
     );
 };
 
-// function to get current weather report and display data to user 
-function getWeatherNow (input) {
-    var userCity = input;
-    // a query URL to get lat and lon coordinates by city name
-    var queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&appid=${weatherApiKey}`;
-    fetch(queryUrl)
-    .then (function (response) {
-        return response.json();
-    })
-    .then(function (data) {
-        var cityLat = data.coord.lat;
-        var cityLon = data.coord.lon;
-        // a query URL to get weather using city lat and lon coordinates 
-        // added imperial units to get temp in Fahrenheit and wind speed in MPH
-        var cityWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${cityLat}&lon=${cityLon}&appid=${weatherApiKey}&units=imperial`;
-        
-            fetch(cityWeatherUrl)
-            .then (function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                var cityName = data.name;               
-                var todayConditonData = data.weather[0].main;
-                var displayTodayCondition;
-
-                // determine which emoji to insert for current report 
-                
-                    if (todayConditonData === "Clear") {
-                        displayTodayCondition = "🔆";
-                    } else if (todayConditonData === "Clouds") {
-                        displayTodayCondition = "☁️";
-                    } else if (todayConditonData === "Atmosphere") {
-                        displayTodayCondition = "🌫️";
-                    } else if (todayConditonData === "Snow") {
-                        displayTodayCondition = "❄️";
-                    } else if (todayConditonData === "Rain") {
-                        displayTodayCondition = "🌧️";
-                    } else if (todayConditonData === "Drizzle") {
-                        displayTodayCondition = "☂️";
-                    } else if (todayConditonData === "Thunderstorm") {
-                        displayTodayCondition = "⛈️";
-                    } else {
-                        displayTodayCondition = todayConditonData;
-                    };
-                
-                // insert class to create border around today's weather container
-                $(".insert-els").addClass("today-container");
-
-                // insert today's conditions
-                cityEl.text(cityName);
-                dateEl.text(new Date(data.dt*1000).toDateString()); // convert unix timestamp to javascript date
-                condEl.text(displayTodayCondition);
-                tempEl.text(`Temp: ${Math.floor(data.main.temp)} °F`);
-                windEl.text(`Wind: ${data.wind.speed} MPH`);
-                humEl.text(`Humidity: ${data.main.humidity} %`);
-             });
-        }
-    );
-};
-
-// function executes creation of btns and weather search 
+// execute creation of btns and weather search 
 function userInput ( ) {
     createBtn ( );
 };
@@ -229,7 +210,7 @@ historyEl.on("click", function (event) {
     var element = event.target;
     if (element.matches("button")) {
         var userCityHis = element.textContent;
-        // call function to get weather data using cities from search history
+        // get weather data using cities from search history
         getWeatherFuture(userCityHis);
         getWeatherNow(userCityHis);
     };
