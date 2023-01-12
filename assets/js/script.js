@@ -142,7 +142,6 @@ function getWeatherFuture (input) {
                 return response.json();
             })
             .then(function (data) {
-                console.log(data);
                 var objLength = data.list.length;
 
                 // insert value for the forecast header 

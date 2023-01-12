@@ -38,7 +38,7 @@ This mock-up demonstrates the user interface of the application.
 
 ## Application link
 
-[Check out the Weather App here!](INSERT LINK TO DEPLOYED APP)
+[Check out the Weather App here!](https://veronika-pomy.github.io/Weather-Dashboard/)
 
 <p align="right">(<a href="#weather-forecast-app">back to top</a>)</p>
 
